@@ -1,0 +1,11 @@
+#+TITLE: A Firmware for Pettern Coty
+
+* Hardware
+** VNH5050A-E
+   - [[https://www.st.com/resource/en/datasheet/vnh5050a-e.pdf][datasheet]]
+
+** 74LV595
+   - [[https://assets.nexperia.com/documents/data-sheet/74LV595.pdf][datasheet]]
+
+* See Also
+  - [[https://github.com/dmadison/LED-Segment-ASCII][Segmented LED Display - ASCII Library]]
