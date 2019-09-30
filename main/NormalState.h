@@ -17,11 +17,9 @@ public:
     virtual void pushLongKey10Sec(Context* c);
 
 private:
-    NormalState() {}
+    NormalState(): _temp_mode(Context::getInstance()->getTempMode()) { }
 
-    // NormalState(NormalState const&);
-    // void operator=(NormalState const&);
+    TempMode& _temp_mode;
 };
-
 
 #endif /* NORMALSTATE_H */

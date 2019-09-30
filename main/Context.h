@@ -7,6 +7,7 @@
 #include "TEC.h"
 #include "LED.h"
 #include "Button.h"
+#include "TempMode.h"
 
 #include "State.h"
 #include "app_event.h"
@@ -30,6 +31,10 @@ public:
     float readCurrentTemperature();
     void printStringToLED(const char *);
 
+    TempMode& getTempMode();
+    void toggleTempMode();
+    bool isColdMode();
+
 private:
     Context();
     // Context(Context const&);
@@ -44,6 +49,7 @@ private:
     TEC _tec;
     LED _led;
     Button _button;
+    TempMode _temp_mode;
 };
 
 

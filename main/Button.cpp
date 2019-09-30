@@ -48,17 +48,6 @@ static void button_timer_callback(void* arg)
     }
 }
 
-#if 0
-extern "C" void button_task(void *arg)
-{
-    Button *btn = (Button *) arg;
-    while (1) {
-        printf("button: %u\n", btn->read());
-        vTaskDelay(pdMS_TO_TICKS(100));
-    }
-}
-#endif //0
-
 Button::Button(): _pin(34)
 {
     _state = 1;
@@ -76,9 +65,6 @@ Button::Button(): _pin(34)
     io_conf.pull_up_en = (gpio_pullup_t) 0;
     //configure GPIO with the given settings
     gpio_config(&io_conf);
-
-    // xTaskCreatePinnedToCore(button_task, "button_task",
-    //                         2048, this, 2, NULL, 1);
 
     _timer_args.callback = &button_timer_callback;
     _timer_args.arg = this;

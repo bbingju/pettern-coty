@@ -40,3 +40,18 @@ void Context::printStringToLED(const char *str)
 {
     _led.printString(str);
 }
+
+TempMode& Context::getTempMode()
+{
+    return _temp_mode;
+}
+
+void Context::toggleTempMode()
+{
+    _temp_mode.toggle();
+}
+
+bool Context::isColdMode()
+{
+    return _temp_mode.isHotMode();
+}

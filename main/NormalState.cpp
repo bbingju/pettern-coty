@@ -11,7 +11,7 @@ void NormalState::pushShortKey(Context* c)
 
 void NormalState::pushLongKey2Sec(Context* c)
 {
-    changeState(c, NormalState::getInstance());
+    app_event_emit(APP_EVENT_TEMP_MODE_TOGGLE);
 }
 
 void NormalState::pushLongKey4Sec(Context* c)

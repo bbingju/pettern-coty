@@ -29,6 +29,8 @@ enum {
 
     APP_EVENT_WIFI_CONFIG_START,
     APP_EVENT_WIFI_CONFIG_STOP,
+
+    APP_EVENT_TEMP_MODE_TOGGLE,
 };
 
 #ifdef __cplusplus

@@ -45,6 +45,9 @@ static const char* get_id_string(esp_event_base_t base, int32_t id)
         case APP_EVENT_WIFI_CONFIG_STOP:
             event = "APP_EVENT_WIFI_CONFIG_STOP";
             break;
+        case APP_EVENT_TEMP_MODE_TOGGLE:
+            event = "APP_EVENT_TEMP_MODE_TOGGLE";
+            break;
         default:
             event = "Unkown event";
         }
@@ -55,7 +58,11 @@ static const char* get_id_string(esp_event_base_t base, int32_t id)
 static void handle_poweron()
 {
     Context *c = Context::getInstance();
-    c->printStringToLED("COLD");
+
+    if (c->isColdMode())
+        c->printStringToLED("COLD");
+    else
+        c->printStringToLED("HOT ");
 }
 
 static void handle_poweroff()
@@ -86,6 +93,16 @@ static void handle_wifi_config_stop()
 {
     Context *c = Context::getInstance();
     c->printStringToLED("WSTP");
+}
+
+static void handle_temp_mode_toggle()
+{
+    Context *c = Context::getInstance();
+    c->toggleTempMode();
+    if (c->isColdMode())
+        c->printStringToLED("COLD");
+    else
+        c->printStringToLED("HOT ");
 }
 
 static void app_loop_handler(void* handler_args, esp_event_base_t base, int32_t id, void* event_data)
@@ -133,6 +150,11 @@ static void app_loop_handler(void* handler_args, esp_event_base_t base, int32_t 
     }
     case APP_EVENT_WIFI_CONFIG_STOP: {
         handle_wifi_config_stop();
+        break;
+    }
+
+    case APP_EVENT_TEMP_MODE_TOGGLE: {
+        handle_temp_mode_toggle();
         break;
     }
 
