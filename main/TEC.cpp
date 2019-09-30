@@ -1,29 +1,34 @@
 #include "TEC.h"
+#include <esp_log.h>
 
-void TEC::heapUp()
+const static char* TAG = "TEC";
+
+void TEC::heatUp()
 {
-    _state = TEC_STATE::HEATUP;
+    _state = HEATUP;
     updateState();
 }
 
 void TEC::coolDown()
 {
-    _state = TEC_STATE::COOLDOWN;
+    _state = COOLDOWN;
     updateState();
 }
 
 void TEC::stop()
 {
-    _state = TEC_STATE::STOP;
+    _state = STOP;
     updateState();
 }
 
 void TEC::updateState()
 {
-    if (_state == TEC_STATE::HEATUP) {
+    ESP_LOGI(TAG, "%s", stateToString());
+
+    if (_state == HEATUP) {
         direction_a.off();
         direction_b.on();
-    } else if (_state == TEC_STATE::COOLDOWN) {
+    } else if (_state == COOLDOWN) {
         direction_a.on();
         direction_b.off();
     } else {
@@ -34,16 +39,27 @@ void TEC::updateState()
 
 bool TEC::isHeating()
 {
-    return _state == TEC_STATE::HEATUP;
+    return _state == HEATUP;
 }
 
 bool TEC::isCooling()
 {
-    return _state == TEC_STATE::COOLDOWN;
+    return _state == COOLDOWN;
 }
 
 bool TEC::isStopped()
 {
-    return _state == TEC_STATE::STOP;
+    return _state == STOP;
 }
 
+const char* TEC::stateToString()
+{
+    switch (_state) {
+    case HEATUP:
+        return "Heating";
+    case COOLDOWN:
+        return "Cooling";
+    default:
+        return "Stopped";
+    }
+}

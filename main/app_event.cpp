@@ -55,6 +55,67 @@ static const char* get_id_string(esp_event_base_t base, int32_t id)
     return event;
 }
 
+static void pid_task(void *arg)
+{
+    Context *c  = (Context *) arg;
+
+    while (1) {
+
+        float current = c->readCurrentTemperature();
+        float target  = c->getTargetTemperature();
+        float target_l = target - 0.5f;
+        float target_h = target + 0.5f;
+
+        if (c->isColdMode()) {
+            if (current > target_h) {
+                if (!c->isTecCooling()) {
+                    c->tecCoolDown();
+                    c->pumpOn();
+                    c->fanOn();
+                }
+            } else if (current < target_l) {
+                if (!c->isTecHeating()) {
+                    c->tecHeatUp();
+                    c->pumpOn();
+                    c->fanOn();
+                }
+            } else {
+                if (!c->isTecStopped()) {
+                    c->tecStop();
+                    c->pumpOff();
+                    c->fanOff();
+                }
+            }
+            ESP_LOGI(TAG, "COLD MODE - Current: %.2f, Target: %.2f => %s", current, target, c->tecState());
+        } else {
+            if (current < target_l) {
+                if (!c->isTecHeating()) {
+                    c->tecHeatUp();
+                    c->pumpOn();
+                    c->fanOn();
+                }
+            }  else if (current > target_h) {
+                if (!c->isTecCooling()) {
+                    c->tecCoolDown();
+                    c->pumpOn();
+                    c->fanOn();
+                }
+            } else {
+                if (!c->isTecStopped()) {
+                    c->tecStop();
+                    c->pumpOff();
+                    c->fanOff();
+                }
+            }
+            ESP_LOGI(TAG, "HOT MODE - Current: %.2f, Target: %.2f => %s", current, target, c->tecState());
+        }
+
+        vTaskDelay(pdMS_TO_TICKS(1000));
+    }
+}
+
+TaskHandle_t pid_task_handle;
+
 static void handle_poweron()
 {
     Context *c = Context::getInstance();
@@ -63,12 +124,21 @@ static void handle_poweron()
         c->printStringToLED("COLD");
     else
         c->printStringToLED("HOT ");
+
+    xTaskCreatePinnedToCore(pid_task, "pid_task",
+                            2048, c, 3, &pid_task_handle, 1);
 }
 
 static void handle_poweroff()
 {
     Context *c = Context::getInstance();
     c->printStringToLED("    ");
+
+    c->tecStop();
+    c->pumpOff();
+    c->fanOff();
+
+    vTaskDelete(pid_task_handle);
 }
 
 static void handle_weight_measure_start()
@@ -99,6 +169,7 @@ static void handle_temp_mode_toggle()
 {
     Context *c = Context::getInstance();
     c->toggleTempMode();
+    c->tecStop();
     if (c->isColdMode())
         c->printStringToLED("COLD");
     else

@@ -33,7 +33,7 @@ void Context::pushLongKey10Sec()
 
 float Context::readCurrentTemperature()
 {
-    return _temp_sensor.read();
+    return _temp_sensor.readAV();
 }
 
 void Context::printStringToLED(const char *str)
@@ -53,5 +53,65 @@ void Context::toggleTempMode()
 
 bool Context::isColdMode()
 {
-    return _temp_mode.isHotMode();
+    return !_temp_mode.isHotMode();
+}
+
+float Context::getTargetTemperature()
+{
+    return _temp_mode.getTargetTemp();
+}
+
+void Context::pumpOn()
+{
+    _pump.on();
+}
+
+void Context::pumpOff()
+{
+    _pump.off();
+}
+
+void Context::fanOn()
+{
+    _fan.on();
+}
+
+void Context::fanOff()
+{
+    _fan.off();
+}
+
+void Context::tecHeatUp()
+{
+    _tec.heatUp();
+}
+
+void Context::tecCoolDown()
+{
+    _tec.coolDown();
+}
+
+void Context::tecStop()
+{
+    _tec.stop();
+}
+
+bool Context::isTecHeating()
+{
+    return _tec.isHeating();
+}
+
+bool Context::isTecCooling()
+{
+    return _tec.isCooling();
+}
+
+bool Context::isTecStopped()
+{
+    return _tec.isStopped();
+}
+
+const char * Context::tecState()
+{
+    return _tec.stateToString();
 }

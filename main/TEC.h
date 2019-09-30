@@ -6,24 +6,24 @@
 class TEC {
 
 public:
-    enum class TEC_STATE {
+    enum TEC_STATE {
         STOP,
         HEATUP,
         COOLDOWN
     };
 
-    TEC() : pwm(18), direction_a(19), direction_b(21) {
-        _state = TEC_STATE::STOP;
+    TEC() : pwm(18), direction_a(19), direction_b(21), _state(STOP) {
         pwm.on();
         updateState();
     }
 
-    void heapUp();
+    void heatUp();
     void coolDown();
     void stop();
     bool isHeating();
     bool isCooling();
     bool isStopped();
+    const char* stateToString();
 
 private:
     Switch pwm;

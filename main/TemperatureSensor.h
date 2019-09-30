@@ -11,6 +11,7 @@ public:
     TemperatureSensor();
 
     float read();
+    float readAV();
 
 };
 

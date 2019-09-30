@@ -40,7 +40,7 @@ private:
     enum TEMP_MODE _mode;
     float _target_temp_cold;
     float _target_temp_hot;
-    float &_current_target_temp;
+    float _current_target_temp;
 };
 
 #endif /* TEMPMODE_H */

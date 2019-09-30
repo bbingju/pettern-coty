@@ -34,6 +34,21 @@ public:
     TempMode& getTempMode();
     void toggleTempMode();
     bool isColdMode();
+    float getTargetTemperature();
+
+    void pumpOn();
+    void pumpOff();
+
+    void fanOn();
+    void fanOff();
+
+    void tecHeatUp();
+    void tecCoolDown();
+    void tecStop();
+    bool isTecHeating();
+    bool isTecCooling();
+    bool isTecStopped();
+    const char *tecState();
 
 private:
     Context();

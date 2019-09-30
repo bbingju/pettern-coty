@@ -17,3 +17,14 @@ float TemperatureSensor::read()
     T = (1.0/(Ra + Rb*LnRt + Rc*pow(LnRt, 3.0)))-273.15;
     return T;
 }
+
+float TemperatureSensor::readAV()
+{
+    float val = 0.0f;
+    int i = 0;
+    for (i = 0; i < 20; i++) {
+        val += read();
+    }
+
+    return (val / i);
+}
