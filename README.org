@@ -7,5 +7,9 @@
 ** 74LV595
    - [[https://assets.nexperia.com/documents/data-sheet/74LV595.pdf][datasheet]]
 
+** HX711
+   - Loadcell
+   - [[https://github.com/bogde/HX711][Arduino driver]]
+
 * See Also
   - [[https://github.com/dmadison/LED-Segment-ASCII][Segmented LED Display - ASCII Library]]

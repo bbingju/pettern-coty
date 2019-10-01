@@ -1,6 +1,7 @@
 #include "app_event.h"
 #include <esp_log.h>
 #include "Context.h"
+#include "HX711.h"
 
 const static char *TAG = "app_event";
 
@@ -114,7 +115,27 @@ static void pid_task(void *arg)
     }
 }
 
+static void loadcell_task(void *arg)
+{
+    Context *c  = (Context *) arg;
+    HX711 scale;
+
+    scale.begin(23, 22);
+    scale.set_scale(293127.f);                      // this value is obtained by calibrating the scale with known weights; see the README for details
+    scale.tare();				        // reset the scale to 0
+
+    while (1) {
+
+        ESP_LOGI(TAG, "Loadcell - read average: %li", scale.read_average(20));
+
+        scale.power_down();			        // put the ADC in sleep mode
+        delay(5000);
+        scale.power_up();
+    }
+}
+
 TaskHandle_t pid_task_handle;
+TaskHandle_t loadcell_task_handle;
 
 static void handle_poweron()
 {
@@ -144,13 +165,16 @@ static void handle_poweroff()
 static void handle_weight_measure_start()
 {
     Context *c = Context::getInstance();
-    c->printStringToLED("MSRT");
+    // c->printStringToLED("MSRT");
+    xTaskCreatePinnedToCore(loadcell_task, "loadcell_task",
+                            2048, c, 3, &loadcell_task_handle, 1);
 }
 
 static void handle_weight_measure_stop()
 {
     Context *c = Context::getInstance();
-    c->printStringToLED("MSTP");
+    // c->printStringToLED("MSTP");
+    vTaskDelete(loadcell_task_handle);
 }
 
 static void handle_wifi_config_start()
