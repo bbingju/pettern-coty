@@ -1,15 +1,18 @@
 #+TITLE: A Firmware for Pettern Coty
 
 * Hardware
-** VNH5050A-E
-   - [[https://www.st.com/resource/en/datasheet/vnh5050a-e.pdf][datasheet]]
-
-** 74LV595
-   - [[https://assets.nexperia.com/documents/data-sheet/74LV595.pdf][datasheet]]
-
-** HX711
-   - Loadcell
+** Motor Driver - VNH5050A-E ([[https://www.st.com/resource/en/datasheet/vnh5050a-e.pdf][datasheet]])
+   - https://github.com/pololu/dual-vnh5019-motor-shield
+** 16 Segment LED
+*** 8 State Serial Shift Register - [[https://www.nexperia.com/products/analog-logic-ics/i-o-expansion-logic/shift-registers/74LV595PW.html][74LV595PW]] ([[https://assets.nexperia.com/documents/data-sheet/74LV595.pdf][datasheet]])
+    - See [[https://lastminuteengineers.com/74hc595-shift-register-arduino-tutorial/][How 74HC595 Shift Register Works & Interface it with Arduino]]
+    - https://github.com/Simsso/ShiftRegister74HC595
+    - [[https://github.com/dmadison/LED-Segment-ASCII][Segmented LED Display - ASCII Library]]
+** Gate Driver -  [[https://toshiba.semicon-storage.com/info/docget.jsp?did=29893][TBD62083A]]
+** Loadcell Amplifier - [[https://www.sparkfun.com/products/13879][HX711]]
    - [[https://github.com/bogde/HX711][Arduino driver]]
 
+* Firmware
+
 * See Also
-  - [[https://github.com/dmadison/LED-Segment-ASCII][Segmented LED Display - ASCII Library]]
+  
