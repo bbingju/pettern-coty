@@ -1,6 +1,17 @@
 #+TITLE: A Firmware for Pettern Coty
 
+이 소스는 강아지 냉온방석에 사용될 보드의 펌웨어이다. 추가 기능으로
+강아지 몸무게 측정 기능이 있으며, 모든 정보는 서버로 전송된다. 전송시
+사용할 프로토콜은 MQTT이다. 서버로 보내진 정보는 시계열 데이터베이스에
+저장된다. (강아지가 호강이다)
+
+#+CAPTION: Testing
+#+NAME: fig:PCR-01
+[[./doc/pettern-coty-testing.jpg]]
+
+
 * Hardware
+** MCU - ESP32
 ** Motor Driver - VNH5050A-E ([[https://www.st.com/resource/en/datasheet/vnh5050a-e.pdf][datasheet]])
    - https://github.com/pololu/dual-vnh5019-motor-shield
 ** 16 Segment LED
