@@ -27,6 +27,8 @@ public:
     void pushLongKey10Sec();
 
     void changeState(State* s);
+    State *getState();
+    bool isNormalState();
 
     float readCurrentTemperature();
 

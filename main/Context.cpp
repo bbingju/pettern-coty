@@ -1,4 +1,5 @@
 #include "Context.h"
+#include "NormalState.h"
 #include "PoweroffState.h"
 
 Context::Context()
@@ -9,6 +10,16 @@ Context::Context()
 void Context::changeState(State* s)
 {
     _state = s;
+}
+
+State * Context::getState()
+{
+    return _state;
+}
+
+bool Context::isNormalState()
+{
+    return _state == NormalState::getInstance();
 }
 
 void Context::pushShortKey()
