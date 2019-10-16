@@ -29,6 +29,8 @@ public:
     void changeState(State* s);
 
     float readCurrentTemperature();
+
+    void changeButtonColor(LED::COLOR);
     void printStringToLED(const char *);
 
     TempMode& getTempMode();

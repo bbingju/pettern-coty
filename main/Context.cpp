@@ -36,6 +36,11 @@ float Context::readCurrentTemperature()
     return _temp_sensor.readAV();
 }
 
+void Context::changeButtonColor(LED::COLOR color)
+{
+    _led.changeButtonColor(color);
+}
+
 void Context::printStringToLED(const char *str)
 {
     _led.printString(str);

@@ -177,6 +177,11 @@ extern "C" void led_set_char(uint8_t *data, char c, int position)
     data[2] |= (1 << (position + 4));
 }
 
+extern "C" void led_set_buton_color(uint8_t *data, LED::COLOR color)
+{
+    data[2] |= color;
+}
+
 extern "C" void led_timer_callback(void* arg)
 {
     static int digit_pos = 0;
@@ -187,10 +192,16 @@ extern "C" void led_timer_callback(void* arg)
         digit_pos = 0;
 
     led_set_char(obj->_data, obj->_string[digit_pos], digit_pos);
+    led_set_buton_color(obj->_data, obj->_button_color);
     led_update_registers(obj->_data_pin, obj->_clock_pin,
                          obj->_latch_pin, obj->_data);
 
     digit_pos++;
+}
+
+void LED::changeButtonColor(COLOR color)
+{
+    _button_color = color;
 }
 
 void LED::printString(const char* str)
