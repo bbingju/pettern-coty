@@ -129,13 +129,13 @@ static void loadcell_task(void *arg)
 
     scale.begin(23, 22);
 
-    // 영점 조정
+    // 영점조정
     scale.set_scale(293127.f); // this value is obtained by
                                // calibrating the scale with known
                                // weights; see the README for details
     scale.tare();              // reset the scale to 0
 
-    // 영점 조정 완료
+    // 영점조정 완료
     snprintf(weight_str, 4, "%.1f", 0.0f);
     c->printStringToLED("    ");
     delay(300);
