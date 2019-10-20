@@ -3,6 +3,7 @@ build/
 sdkconfig
 sdkconfig.old
 *~
+.ccls-cache/
 
 ### C ###
 # Prerequisites
