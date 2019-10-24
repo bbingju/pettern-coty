@@ -1,8 +1,7 @@
 #include "Button.h"
-#include <esp_log.h>
-// #include "esp_sleep.h"
-#include <driver/gpio.h>
 #include "app_event.h"
+#include <esp_log.h>
+#include <driver/gpio.h>
 
 //static const char* TAG = "button";
 

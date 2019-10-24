@@ -2,7 +2,6 @@
 #define APP_EVENT_H
 
 #include "event_source.h"
-#include "esp_event_base.h"
 
 #ifdef __cplusplus
 extern "C" {

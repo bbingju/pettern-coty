@@ -2,8 +2,6 @@
 #include "Context.h"
 #include "app_event.h"
 
-//const char *TAG = "Main";
-
 extern "C" void app_main()
 {
     initArduino();

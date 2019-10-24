@@ -3,6 +3,9 @@
 
 #include "Context.h"
 
+#include "freertos/FreeRTOS.h"
+#include "freertos/task.h"
+
 class WifiConfigState: public State {
 
 public:
@@ -11,10 +14,15 @@ public:
         return &instance;
     }
 
-    virtual void pushLongKey10Sec(Context* c);
+    void pushLongKey10Sec(Context* c);
 
 private:
-    WifiConfigState() {}
+  WifiConfigState() {}
+
+  TaskHandle_t _task_handle;
+
+  void begin(Context *);
+  void end(Context *);
 };
 
 #endif /* WIFICONFIGSTATE_H */

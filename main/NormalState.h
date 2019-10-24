@@ -3,23 +3,29 @@
 
 #include "Context.h"
 
-class NormalState: public State {
+#include "freertos/FreeRTOS.h"
+#include "freertos/task.h"
+
+class NormalState : public State {
 
 public:
-    static NormalState* getInstance() {
-        static NormalState instance;
-        return &instance;
-    }
+  static NormalState *getInstance() {
+    static NormalState instance;
+    return &instance;
+  }
 
-    virtual void pushShortKey(Context* c);
-    virtual void pushLongKey2Sec(Context* c);
-    virtual void pushLongKey4Sec(Context* c);
-    virtual void pushLongKey10Sec(Context* c);
+  void pushShortKey(Context *c);
+  void pushLongKey2Sec(Context *c);
+  void pushLongKey4Sec(Context *c);
+  void pushLongKey10Sec(Context *c);
 
 private:
-    NormalState(): _temp_mode(Context::getInstance()->getTempMode()) { }
+  NormalState() : _temp_mode(Context::getInstance()->getTempMode()) {}
 
-    TempMode& _temp_mode;
+  TempMode &_temp_mode;
+  TaskHandle_t _task_handle;
+  void begin(Context *);
+  void end(Context *);
 };
 
 #endif /* NORMALSTATE_H */

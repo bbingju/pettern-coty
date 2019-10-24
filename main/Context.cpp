@@ -1,45 +1,80 @@
 #include "Context.h"
 #include "NormalState.h"
-#include "PoweroffState.h"
+#include "OffState.h"
 
 Context::Context()
 {
-    _state = PoweroffState::getInstance();
+    _state_stack[_state_stack_idx] = OffState::getInstance();
+
+    // get preferences
+    _pref.begin("cotypref");
+    float hot_mode_temp = _pref.getFloat("hot_mode_temp", 37.f);
+    float cold_mode_temp = _pref.getFloat("cold_mode_temp", 25.f);
+    // Serial.printf("hot_mode_temp = %.1f\n", hot_mode_temp);
+    // Serial.printf("cold_mode_temp = %.1f\n", cold_mode_temp);
+    _temp_mode.setTargetTemp(TempMode::COLD, cold_mode_temp);
+    _temp_mode.setTargetTemp(TempMode::HOT, hot_mode_temp);
+    _pref.end();
 }
 
-void Context::changeState(State* s)
+void Context::changeState(State *s)
 {
-    _state = s;
+    while (_state_stack_idx > 0) {
+        unstackState();
+    }
+
+    State *current = _state_stack[_state_stack_idx];
+
+    current->end(this);
+    _state_stack[_state_stack_idx] = current = s;
+    current->begin(this);
+}
+
+void Context::stackState(State *s)
+{
+    if (_state_stack_idx <= state_stack_max - 1) {
+        _state_stack[++_state_stack_idx] = s;
+        _state_stack[_state_stack_idx]->begin(this);
+    }
+}
+
+void Context::unstackState()
+{
+    if (_state_stack_idx > 0) {
+        _state_stack[_state_stack_idx]->end(this);
+        // _state_stack[_state_stack_idx] = NULL;
+        _state_stack_idx--;
+    }
 }
 
 State * Context::getState()
 {
-    return _state;
+    return _state_stack[_state_stack_idx];
 }
 
 bool Context::isNormalState()
 {
-    return _state == NormalState::getInstance();
+    return _state_stack[_state_stack_idx] == NormalState::getInstance();
 }
 
 void Context::pushShortKey()
 {
-    _state->pushShortKey(this);
+    _state_stack[_state_stack_idx]->pushShortKey(this);
 }
 
 void Context::pushLongKey2Sec()
 {
-    _state->pushLongKey2Sec(this);
+    _state_stack[_state_stack_idx]->pushLongKey2Sec(this);
 }
 
 void Context::pushLongKey4Sec()
 {
-    _state->pushLongKey4Sec(this);
+    _state_stack[_state_stack_idx]->pushLongKey4Sec(this);
 }
 
 void Context::pushLongKey10Sec()
 {
-    _state->pushLongKey10Sec(this);
+    _state_stack[_state_stack_idx]->pushLongKey10Sec(this);
 }
 
 float Context::readCurrentTemperature()

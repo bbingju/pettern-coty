@@ -1,8 +1,63 @@
 #include "MeasureState.h"
 #include "NormalState.h"
+#include "HX711.h"
 
-void MeasureState::pushShortKey(Context* c)
+static const char * TAG = "MEASURE_STATE";
+
+extern "C" {
+    static void loadcell_task(void *arg)
+    {
+        Context *c = (Context *)arg;
+        HX711 scale;
+        static char weight_str[5] = {0};
+
+        scale.begin(23, 22);
+
+        // 영점조정
+        scale.set_scale(293127.f); // this value is obtained by
+                                   // calibrating the scale with known
+                                   // weights; see the README for details
+        scale.tare();              // reset the scale to 0
+
+        // 영점조정 완료
+        snprintf(weight_str, 4, "%.1f", 0.0f);
+        c->printStringToLED("    ");
+        vTaskDelay(pdMS_TO_TICKS(300));
+        c->printStringToLED(weight_str);
+        vTaskDelay(pdMS_TO_TICKS(300));
+        c->printStringToLED("    ");
+        vTaskDelay(pdMS_TO_TICKS(300));
+        c->printStringToLED(weight_str);
+
+        while (1) {
+
+            long int v = scale.read_average(20);
+            float w = (float)v;
+
+            ESP_LOGI(TAG, "Loadcell - read average: %li", v);
+
+            snprintf(weight_str, 4, "%.1f", w);
+            c->printStringToLED(weight_str);
+
+            scale.power_down(); // put the ADC in sleep mode
+            vTaskDelay(pdMS_TO_TICKS(5000));
+            scale.power_up();
+        }
+    }
+}
+
+void MeasureState::pushShortKey(Context *c)
 {
-    app_event_emit(APP_EVENT_WEIGHT_MEASURE_STOP);
-    changeState(c, NormalState::getInstance());
+    c->unstackState();
+}
+
+void MeasureState::begin(Context *c)
+{
+    xTaskCreatePinnedToCore(loadcell_task, "loadcell_task",
+                            4096, c, 3, &_task_handle, 1);
+}
+
+void MeasureState::end(Context *c)
+{
+    vTaskDelete(_task_handle);  
 }

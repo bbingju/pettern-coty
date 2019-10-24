@@ -12,6 +12,8 @@
 #include "State.h"
 #include "app_event.h"
 
+#include <Preferences.h>
+
 class State;
 
 class Context {
@@ -27,6 +29,9 @@ public:
     void pushLongKey10Sec();
 
     void changeState(State* s);
+    void stackState(State *s);
+    void unstackState();
+
     State *getState();
     bool isNormalState();
 
@@ -59,9 +64,12 @@ private:
     // Context(Context const&);
     // void operator=(Context const&);
 
+    const int state_stack_max{3};
     friend class State;
-    State* _state;
+    State *_state_stack[3]{0};
+    int _state_stack_idx{0};
 
+    Preferences _pref;
     TemperatureSensor _temp_sensor;
     PumpSwitch _pump;
     FanSwitch _fan;
@@ -70,6 +78,5 @@ private:
     Button _button;
     TempMode _temp_mode;
 };
-
 
 #endif /* CONTEXT_H */
