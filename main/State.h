@@ -15,6 +15,10 @@ public:
   virtual void pushLongKey2Sec(Context *c);
   virtual void pushLongKey4Sec(Context *c);
   virtual void pushLongKey10Sec(Context *c);
+  virtual void pressing2Sec(Context *c);
+  virtual void pressing6Sec(Context *c);
+  virtual void pressing10Sec(Context *c);
+
   virtual void begin(Context *c);
   virtual void end(Context *);
   // void operator=(State const&);

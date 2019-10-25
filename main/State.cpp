@@ -23,6 +23,21 @@ void State::pushLongKey10Sec(Context* c)
     ESP_LOGI(TAG, "10 sec long key ignored");
 }
 
+void State::pressing2Sec(Context *c)
+{
+    ESP_LOGI(TAG, "default pressing 2 Sec");
+}
+
+void State::pressing6Sec(Context *c)
+{
+    ESP_LOGI(TAG, "default pressing 6 Sec");
+}
+
+void State::pressing10Sec(Context *c)
+{
+   ESP_LOGI(TAG, "default pressing 10 sec");
+}
+
 void State::begin(Context *c)
 {
     ESP_LOGI(TAG, "default begin");

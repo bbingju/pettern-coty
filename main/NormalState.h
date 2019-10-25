@@ -18,6 +18,9 @@ public:
   void pushLongKey2Sec(Context *c);
   void pushLongKey4Sec(Context *c);
   void pushLongKey10Sec(Context *c);
+  void pressing2Sec(Context *c);
+  void pressing6Sec(Context *c);
+  void pressing10Sec(Context *c);
 
 private:
   NormalState() : _temp_mode(Context::getInstance()->getTempMode()) {}

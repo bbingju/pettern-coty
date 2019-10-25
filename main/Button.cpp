@@ -14,34 +14,48 @@ static void button_timer_callback(void* arg)
     static int64_t pushed_tick = 0;
     static int prev_state = 1;
     static int current_state = 1;
-    static bool event_emitted = false;
 
     prev_state = current_state;
     current_state = btn->read();
 
     if (prev_state == 1 && current_state == 0) { // 버튼 눌림
         pushed_tick = esp_timer_get_time();
-        event_emitted = false;
+        btn->is_pressing = true;
+        btn->is_valid = false;
     } else if (prev_state == 0 && current_state == 0) { // 눌림 상태 지속
         int64_t duration = esp_timer_get_time() - pushed_tick;
-        if (!event_emitted && duration >= SEC(10)) {
-            event_emitted = true;
-            app_event_emit(APP_EVENT_BTN_LONG_10SEC);
+
+        if (btn->is_pressing) {
+            if (duration >= SEC(2) && duration < SEC(4)) {
+                btn->is_valid = true;
+                app_event_emit(APP_EVENT_BTN_PRESSING_2_4);
+            }
+            else if (duration >= SEC(6) && duration < SEC(8)) {
+                btn->is_valid = true;
+                app_event_emit(APP_EVENT_BTN_PRESSING_6_8);
+            }
+            else if (duration >= SEC(10) && duration < SEC(12)) {
+                btn->is_valid = true;
+                app_event_emit(APP_EVENT_BTN_PRESSING_10_12);
+            }
+            else
+                btn->is_valid = false;
         }
     } else if (prev_state == 0 && current_state == 1) { // 버튼 떨어짐
         int64_t duration = esp_timer_get_time() - pushed_tick;
         if (duration >= SEC(2) && duration < SEC(4)) {
-            event_emitted = true;
             app_event_emit(APP_EVENT_BTN_LONG_2SEC);
-        } else if (duration >= SEC(4) && duration < SEC(10)) {
-            event_emitted = true;
-            app_event_emit(APP_EVENT_BTN_LONG_4SEC);
+        } else if (duration >= SEC(6) && duration < SEC(8)) {
+            app_event_emit(APP_EVENT_BTN_LONG_6SEC);
+        } else if (duration >= SEC(10) && duration < SEC(12)) {
+            app_event_emit(APP_EVENT_BTN_LONG_10SEC);
         } else {
             if (duration < SEC(1)) {
-                event_emitted = true;
                 app_event_emit(APP_EVENT_BTN_SHORT);
             }
         }
+        btn->is_pressing = false;
+        btn->is_valid = false;
     } else {
         // ESP_LOGI(TAG, "other states\n");
     }
@@ -50,6 +64,8 @@ static void button_timer_callback(void* arg)
 Button::Button(): _pin(34)
 {
     _state = 1;
+    is_pressing = false;
+    is_valid = false;
 
     gpio_config_t io_conf;
     //disable interrupt

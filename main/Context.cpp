@@ -57,6 +57,16 @@ bool Context::isNormalState()
     return _state_stack[_state_stack_idx] == NormalState::getInstance();
 }
 
+bool Context::isButtonPressing()
+{
+    return _button.is_pressing;
+}
+
+bool Context::isButtonValid()
+{
+    return _button.is_valid;
+}
+
 void Context::pushShortKey()
 {
     _state_stack[_state_stack_idx]->pushShortKey(this);
@@ -75,6 +85,21 @@ void Context::pushLongKey4Sec()
 void Context::pushLongKey10Sec()
 {
     _state_stack[_state_stack_idx]->pushLongKey10Sec(this);
+}
+
+void Context::buttonPressing2Sec()
+{
+    _state_stack[_state_stack_idx]->pressing2Sec(this);
+}
+
+void Context::buttonPressing6Sec()
+{
+    _state_stack[_state_stack_idx]->pressing6Sec(this);
+}
+
+void Context::buttonPressing10Sec()
+{
+    _state_stack[_state_stack_idx]->pressing10Sec(this);
 }
 
 float Context::readCurrentTemperature()

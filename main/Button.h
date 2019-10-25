@@ -10,6 +10,9 @@ public:
 
     int read();
 
+    bool is_pressing;
+    bool is_valid;
+
 private:
     int _pin;
     int _state;

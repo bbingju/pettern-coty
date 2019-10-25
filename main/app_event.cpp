@@ -16,17 +16,29 @@ static const char* get_id_string(esp_event_base_t base, int32_t id)
 
     if (base == APP_EVENTS) {
         switch (id) {
+        case APP_EVENT_BTN_JUST_DOWN:
+            event = "APP_EVENT_BTN_JUST_DOWN";
+            break;
         case APP_EVENT_BTN_SHORT:
             event = "APP_EVENT_BTN_SHORT";
             break;
         case APP_EVENT_BTN_LONG_2SEC:
             event = "APP_EVENT_BTN_LONG_2SEC";
             break;
-        case APP_EVENT_BTN_LONG_4SEC:
-            event = "APP_EVENT_BTN_LONG_4SEC";
+        case APP_EVENT_BTN_LONG_6SEC:
+            event = "APP_EVENT_BTN_LONG_6SEC";
             break;
         case APP_EVENT_BTN_LONG_10SEC:
             event = "APP_EVENT_BTN_LONG_10SEC";
+            break;
+        case APP_EVENT_BTN_PRESSING_2_4:
+            event = "APP_EVENT_BTN_PRESSING_2_4";
+            break;
+        case APP_EVENT_BTN_PRESSING_6_8:
+            event = "APP_EVENT_BTN_PRESSING_6_8";
+            break;
+        case APP_EVENT_BTN_PRESSING_10_12:
+            event = "APP_EVENT_BTN_PRESSING_10_12";
             break;
         case APP_EVENT_TEMP_MODE_TOGGLE:
             event = "APP_EVENT_TEMP_MODE_TOGGLE";
@@ -37,12 +49,6 @@ static const char* get_id_string(esp_event_base_t base, int32_t id)
     }
     return event;
 }
-
-// static void poweron_timer_callback(void* arg)
-// {
-//     Context *c = (Context *) arg;
-//     c->changeButtonColor(LED::BLACK);
-// }
 
 static void handle_temp_mode_toggle()
 {
@@ -65,6 +71,10 @@ static void app_loop_handler(void* handler_args, esp_event_base_t base, int32_t 
 
     switch (id) {
 
+    case APP_EVENT_BTN_JUST_DOWN: {
+        // Context::getInstance()->buttonJustPressed();
+        break;
+    }
     case APP_EVENT_BTN_SHORT: {
         // struct app_event_arg *d = (struct app_event_arg *) event_data;
         Context::getInstance()->pushShortKey();
@@ -74,12 +84,24 @@ static void app_loop_handler(void* handler_args, esp_event_base_t base, int32_t 
         Context::getInstance()->pushLongKey2Sec();
         break;
     }
-    case APP_EVENT_BTN_LONG_4SEC: {
+    case APP_EVENT_BTN_LONG_6SEC: {
         Context::getInstance()->pushLongKey4Sec();
         break;
     }
     case APP_EVENT_BTN_LONG_10SEC: {
         Context::getInstance()->pushLongKey10Sec();
+        break;
+    }
+    case APP_EVENT_BTN_PRESSING_2_4: {
+        Context::getInstance()->buttonPressing2Sec();
+        break;
+    }
+    case APP_EVENT_BTN_PRESSING_6_8: {
+        Context::getInstance()->buttonPressing6Sec();
+        break;
+    }
+    case APP_EVENT_BTN_PRESSING_10_12: {
+        Context::getInstance()->buttonPressing10Sec();
         break;
     }
     case APP_EVENT_TEMP_MODE_TOGGLE: {

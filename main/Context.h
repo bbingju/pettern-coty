@@ -27,6 +27,11 @@ public:
     void pushLongKey2Sec();
     void pushLongKey4Sec();
     void pushLongKey10Sec();
+    void buttonPressing2Sec();
+    void buttonPressing6Sec();
+    void buttonPressing10Sec();
+    bool isButtonPressing();
+    bool isButtonValid();
 
     void changeState(State* s);
     void stackState(State *s);

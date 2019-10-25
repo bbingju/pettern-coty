@@ -73,7 +73,7 @@ extern "C" {
                    target, c->tecState());
         }
 
-        if (c->isNormalState()) {
+        if (c->isNormalState() && !c->isButtonValid()) {
           snprintf(target_str, 4, "%.1f", target);
           c->printStringToLED(target_str);
         }
@@ -101,6 +101,48 @@ void NormalState::pushLongKey4Sec(Context* c)
 void NormalState::pushLongKey10Sec(Context* c)
 {
     c->changeState(WifiConfigState::getInstance());
+}
+
+void NormalState::pressing2Sec(Context *c)
+{
+    static bool flag = true;
+    static int count = 0;
+
+    if (count == 0) {
+        c->printStringToLED(flag ? (c->isColdMode() ? "HOT " : "COLD") : "    ");
+        flag = !flag;
+    }
+
+    ++count;
+    count %= 3;
+}
+
+void NormalState::pressing6Sec(Context *c)
+{
+    static bool flag = true;
+    static int count = 0;
+
+    if (count == 0) {
+        c->printStringToLED(flag ? " CU " : "    ");
+        flag = !flag;
+    }
+
+    ++count;
+    count %= 3;
+}
+
+void NormalState::pressing10Sec(Context *c)
+{
+    static bool flag = true;
+    static int count = 0;
+
+    if (count == 0) {
+        c->printStringToLED(flag ? "WIFI" : "    ");
+        flag = !flag;
+    }
+
+    ++count;
+    count %= 3;
 }
 
 void NormalState::begin(Context *c)
