@@ -8,6 +8,8 @@ static void wifi_setting_task(void *arg)
     Context *c = (Context *) arg;
 
     while (1) {
+        c->printStringToLED("WIFI");
+
         c->changeButtonColor(LED::RED);
         vTaskDelay(pdMS_TO_TICKS(400));
         c->changeButtonColor(LED::BLUE);
@@ -19,6 +21,20 @@ static void wifi_setting_task(void *arg)
 void WifiConfigState::pushLongKey10Sec(Context* c)
 {
   c->changeState(NormalState::getInstance());
+}
+
+void WifiConfigState::pressing10Sec(Context *c)
+{
+    static bool flag = true;
+    static int count = 0;
+
+    if (count == 0) {
+        c->printStringToLED(flag ? (c->isColdMode() ? "COLD" : "HOT") : "    ");
+        flag = !flag;
+    }
+
+    ++count;
+    count %= 3;
 }
 
 void WifiConfigState::begin(Context *c)
@@ -33,6 +49,7 @@ void WifiConfigState::begin(Context *c)
 void WifiConfigState::end(Context *c)
 {
     c->printStringToLED("    ");
+    c->changeButtonColor(LED::BLACK);
 
     vTaskDelete(_task_handle);
 }

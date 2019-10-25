@@ -147,6 +147,8 @@ void NormalState::pressing10Sec(Context *c)
 
 void NormalState::begin(Context *c)
 {
+    c->changeButtonColor(c->isColdMode() ? LED::BLUE : LED::RED);
+
     xTaskCreatePinnedToCore(pid_task, "pid_task",
 			    4096, c, 3, &_task_handle, 1);
 }

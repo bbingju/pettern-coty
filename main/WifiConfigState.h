@@ -15,6 +15,7 @@ public:
     }
 
     void pushLongKey10Sec(Context* c);
+    void pressing10Sec(Context *c);
 
 private:
   WifiConfigState() {}
