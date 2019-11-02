@@ -10,10 +10,10 @@ Context::Context()
     _pref.begin("cotypref");
     float hot_mode_temp = _pref.getFloat("hot_mode_temp", 37.f);
     float cold_mode_temp = _pref.getFloat("cold_mode_temp", 25.f);
-    // Serial.printf("hot_mode_temp = %.1f\n", hot_mode_temp);
-    // Serial.printf("cold_mode_temp = %.1f\n", cold_mode_temp);
-    _temp_mode.setTargetTemp(TempMode::COLD, cold_mode_temp);
-    _temp_mode.setTargetTemp(TempMode::HOT, hot_mode_temp);
+    printf("hot_mode_temp = %.1f\n", hot_mode_temp);
+    printf("cold_mode_temp = %.1f\n", cold_mode_temp);
+    _temp_mode.setTarget(TempMode::HOT, hot_mode_temp);
+    _temp_mode.setTarget(TempMode::COLD, cold_mode_temp);
     _pref.end();
 }
 
@@ -139,7 +139,7 @@ bool Context::isColdMode()
 
 float Context::getTargetTemperature()
 {
-    return _temp_mode.getTargetTemp();
+    return _temp_mode.getTarget();
 }
 
 void Context::pumpOn()

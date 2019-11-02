@@ -19,24 +19,24 @@ extern "C" {
         scale.tare();              // reset the scale to 0
 
         // 영점조정 완료
-        snprintf(weight_str, 4, "%.1f", 0.0f);
         c->printStringToLED("    ");
         vTaskDelay(pdMS_TO_TICKS(300));
-        c->printStringToLED(weight_str);
+        c->printTemperatureToLED(0.f);
         vTaskDelay(pdMS_TO_TICKS(300));
         c->printStringToLED("    ");
         vTaskDelay(pdMS_TO_TICKS(300));
-        c->printStringToLED(weight_str);
+        c->printTemperatureToLED(0.f);
 
         while (1) {
 
             long int v = scale.read_average(20);
-            float w = (float)v;
+            float w;
 
-            ESP_LOGI(TAG, "Loadcell - read average: %li", v);
+            w = 8 * powf(10, -6) * ((float) v) + 0.5325;
 
-            snprintf(weight_str, 4, "%.1f", w);
-            c->printStringToLED(weight_str);
+            ESP_LOGI(TAG, "Loadcell - read average: %li, %.2f", v, w);
+
+            c->printTemperatureToLED(w);
 
             scale.power_down(); // put the ADC in sleep mode
             vTaskDelay(pdMS_TO_TICKS(5000));

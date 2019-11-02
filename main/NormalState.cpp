@@ -19,10 +19,20 @@ extern "C" {
     {
       Context *c = (Context *)arg;
 
+      Input = c->readCurrentTemperature();
+      Setpoint = c->getTargetTemperature();
+
+      myPID.SetMode(AUTOMATIC);
+
       while (1) {
 
-        float current = c->readCurrentTemperature();
-        float target = c->getTargetTemperature();
+        Input = c->readCurrentTemperature();
+        Setpoint = c->getTargetTemperature();
+
+        myPID.Compute();
+
+        double current = c->readCurrentTemperature();
+        double target = c->getTargetTemperature();
         float target_l = target - 0.5f;
         float target_h = target + 0.5f;
 
