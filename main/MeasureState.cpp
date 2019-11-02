@@ -9,7 +9,6 @@ extern "C" {
     {
         Context *c = (Context *)arg;
         HX711 scale;
-        static char weight_str[5] = {0};
 
         scale.begin(23, 22);
 

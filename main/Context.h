@@ -44,6 +44,7 @@ public:
 
     void changeButtonColor(LED::COLOR);
     void printStringToLED(const char *);
+    void printTemperatureToLED(const float);
 
     TempMode& getTempMode();
     void toggleTempMode();

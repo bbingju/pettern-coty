@@ -18,7 +18,6 @@ extern "C" {
     static void pid_task(void *arg)
     {
       Context *c = (Context *)arg;
-      static char target_str[5] = {0};
 
       while (1) {
 
@@ -74,8 +73,7 @@ extern "C" {
         }
 
         if (c->isNormalState() && !c->isButtonValid()) {
-          snprintf(target_str, 4, "%.1f", target);
-          c->printStringToLED(target_str);
+            c->printTemperatureToLED(target);
         }
 
         vTaskDelay(pdMS_TO_TICKS(1000));

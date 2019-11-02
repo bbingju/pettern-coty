@@ -117,6 +117,11 @@ void Context::printStringToLED(const char *str)
     _led.printString(str);
 }
 
+void Context::printTemperatureToLED(const float value)
+{
+    _led.printFloat(value);
+}
+
 TempMode& Context::getTempMode()
 {
     return _temp_mode;

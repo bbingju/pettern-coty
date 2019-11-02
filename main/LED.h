@@ -19,6 +19,7 @@ public:
 
     void changeButtonColor(COLOR);
     void printString(const char *str);
+    void printFloat(const float value);
 
     int _clock_pin;
     int _data_pin;
@@ -29,6 +30,8 @@ public:
     uint8_t _data[3];
     char _string[5];
     COLOR _button_color;
+    bool _isfloat;
+    int  _point_position;
 
     esp_timer_handle_t _timer;
     esp_timer_create_args_t _timer_args;

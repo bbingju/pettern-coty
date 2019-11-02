@@ -135,6 +135,7 @@ LED::LED() : _clock_pin(14), _data_pin(15), _latch_pin(13),
     _timer_args.name = "led_timer";
 
     esp_timer_create(&_timer_args, &_timer);
+    _isfloat = false;
     start();
 }
 
@@ -158,8 +159,10 @@ extern "C" void led_update_registers(int data_pin, int clock_pin, int latch_pin,
     gpio_set_level((gpio_num_t) latch_pin, 0);
 }
 
-extern "C" void led_set_char(uint8_t *data, char c, int position)
+extern "C" void led_set_char(void *arg, uint8_t *data, char c, int position)
 {
+    LED *obj = (LED *) arg;
+
     int i = c - ' ';
 
     if (i < 0 || i > 95)
@@ -170,10 +173,15 @@ extern "C" void led_set_char(uint8_t *data, char c, int position)
 
     uint32_t v = segment_ascii[i];
 
+    if (obj->_isfloat && position == obj->_point_position)
+        data[2] = 0;
+    else
+        data[2] = 1;
     data[0] = (v & 0xff);
     data[1] = (v & (0xff << 8)) >> 8;
-    data[2] = (v & (0x01 << 16)) >> 16;
-
+    if (!obj->_isfloat)
+        data[2] = (v & (0x01 << 16)) >> 16;
+ 
     data[2] |= (1 << (position + 4));
 }
 
@@ -191,7 +199,7 @@ extern "C" void led_timer_callback(void* arg)
     if (digit_pos == 4)
         digit_pos = 0;
 
-    led_set_char(obj->_data, obj->_string[digit_pos], digit_pos);
+    led_set_char(obj, obj->_data, obj->_string[digit_pos], digit_pos);
     led_set_buton_color(obj->_data, obj->_button_color);
     led_update_registers(obj->_data_pin, obj->_clock_pin,
                          obj->_latch_pin, obj->_data);
@@ -207,7 +215,40 @@ void LED::changeButtonColor(COLOR color)
 void LED::printString(const char* str)
 {
     stop();
+    _point_position = 1;
+    _isfloat = false;
     set(str);
+    start();
+}
+
+void LED::printFloat(const float value)
+{
+    if (value < 0.f || value > 1000.f)
+        return;
+
+    char value_str[5] = {0};
+    int v;
+
+    stop();
+
+    if (value >= 0.f && value < 10.f) {
+        _point_position = 1;
+        v = (int) (value * 100);
+        snprintf(value_str + 1, 3, "%03u", v);
+    }
+    else if (value >= 100.f && value < 1000.f) {
+        _point_position = 2;
+        v = (int) (value * 10);
+        snprintf(value_str, 4, "%4u", v);
+    }
+    else {
+        _point_position = 1;
+        v = (int) (value * 100);
+        snprintf(value_str, 4, "%4u", v);
+    }
+
+    _isfloat = true;
+    set(value_str);
     start();
 }
 
@@ -223,5 +264,7 @@ void LED::stop()
 
 void LED::set(const char *str)
 {
-    strncpy(_string, str, 4);
+    for (int i = 0; i < 4; i++)
+        _string[i] = *(str + i);
+    _string[4] = 0;
 }
