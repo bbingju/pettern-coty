@@ -1,4 +1,9 @@
 #+TITLE: A Firmware for Pettern Coty
+#+OPTIONS: toc:t title:t email:t d:t ^:nil
+#+AUTHOR: Phil Hwang
+#+EMAIL: pjhwang@gmail.com
+#+LANGUAGE: ko
+#+SETUPFILE: https://fniessen.github.io/org-html-themes/setup/theme-readtheorg.setup
 
 이 소스는 강아지 냉온방석에 사용될 보드의 펌웨어이다. 추가 기능으로
 강아지 몸무게 측정 기능이 있으며, 모든 정보는 서버로 전송된다. 전송시
