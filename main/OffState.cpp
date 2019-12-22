@@ -17,7 +17,7 @@ void OffState::pushShortKey(Context *c) {
 
 void OffState::begin(Context *c)
 {
-    c->printStringToLED(" CU ");
+    c->printStringToLED("BYE ");
 
     _timer_args.callback = &timer_callback;
     _timer_args.arg = c;

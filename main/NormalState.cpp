@@ -131,7 +131,7 @@ void NormalState::pressing6Sec(Context *c)
     static int count = 0;
 
     if (count == 0) {
-        c->printStringToLED(flag ? " CU " : "    ");
+        c->printStringToLED(flag ? "BYE " : "    ");
         flag = !flag;
     }
 
