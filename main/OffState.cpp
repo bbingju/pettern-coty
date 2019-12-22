@@ -28,7 +28,7 @@ void OffState::begin(Context *c)
 
 void OffState::end(Context *c)
 {
-  c->printStringToLED(" ON ");
+  c->printStringToLED(" HI ");
   vTaskDelay(pdMS_TO_TICKS(1200));
 
   if (c->isColdMode()) {
