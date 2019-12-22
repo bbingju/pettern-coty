@@ -28,15 +28,15 @@ static void button_timer_callback(void* arg)
         if (btn->is_pressing) {
             if (duration >= SEC(2) && duration < SEC(4)) {
                 btn->is_valid = true;
-                app_event_emit(APP_EVENT_BTN_PRESSING_2_4);
+                app_event_emit(APP_EVENT_BTN_PRESSING_2_4, NULL);
             }
             else if (duration >= SEC(6) && duration < SEC(8)) {
                 btn->is_valid = true;
-                app_event_emit(APP_EVENT_BTN_PRESSING_6_8);
+                app_event_emit(APP_EVENT_BTN_PRESSING_6_8, NULL);
             }
             else if (duration >= SEC(10) && duration < SEC(12)) {
                 btn->is_valid = true;
-                app_event_emit(APP_EVENT_BTN_PRESSING_10_12);
+                app_event_emit(APP_EVENT_BTN_PRESSING_10_12, NULL);
             }
             else
                 btn->is_valid = false;

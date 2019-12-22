@@ -126,7 +126,7 @@ void app_event_loop_create()
     ESP_ERROR_CHECK(esp_event_handler_register_with(app_loop, APP_EVENTS, ESP_EVENT_ANY_ID, app_loop_handler, app_loop));
 }
 
-void app_event_emit(int event)
+void app_event_emit(int event, void *param)
 {
-    esp_event_post_to(app_loop, APP_EVENTS, event, NULL, 0, portMAX_DELAY);
+    esp_event_post_to(app_loop, APP_EVENTS, event, param, 0, portMAX_DELAY);
 }

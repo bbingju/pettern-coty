@@ -8,7 +8,7 @@ extern "C" {
 #endif
 
     void app_event_loop_create();
-    void app_event_emit(int event);
+    void app_event_emit(int event, void *param);
 
 #ifdef __cplusplus
 }

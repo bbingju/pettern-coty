@@ -98,7 +98,7 @@ void NormalState::pushShortKey(Context* c)
 
 void NormalState::pushLongKey2Sec(Context* c)
 {
-    app_event_emit(APP_EVENT_TEMP_MODE_TOGGLE);
+    app_event_emit(APP_EVENT_TEMP_MODE_TOGGLE, NULL);
 }
 
 void NormalState::pushLongKey4Sec(Context* c)
