@@ -15,7 +15,7 @@ public:
     return &instance;
   }
 
-  void pushShortKey(Context *c);
+  void buttonPressedShort(Context *c);
 
 private:
   MeasureState() {}

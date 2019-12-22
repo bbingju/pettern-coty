@@ -11,10 +11,11 @@ public:
   State() {}
   ~State() {}
 
-  virtual void pushShortKey(Context *c);
-  virtual void pushLongKey2Sec(Context *c);
-  virtual void pushLongKey4Sec(Context *c);
-  virtual void pushLongKey10Sec(Context *c);
+  virtual void buttonPressedShort(Context *c);
+  virtual void buttonPressedLong(Context *c);
+  virtual void buttonPressedDouble(Context *c);
+  virtual void pressing(Context *c);
+  virtual void buttonPressingPerSec(Context *c);
   virtual void pressing2Sec(Context *c);
   virtual void pressing6Sec(Context *c);
   virtual void pressing10Sec(Context *c);

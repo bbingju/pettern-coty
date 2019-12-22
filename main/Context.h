@@ -23,13 +23,15 @@ public:
         return &instance;
     }
 
-    void pushShortKey();
-    void pushLongKey2Sec();
-    void pushLongKey4Sec();
-    void pushLongKey10Sec();
+    void buttonPressedShort();
+    void buttonPressedLong();
+    void buttonPressedDouble();
+    void buttonPressing(Button *);
+    void buttonPressingPerSec();
     void buttonPressing2Sec();
     void buttonPressing6Sec();
     void buttonPressing10Sec();
+    int  buttonPressingDuration();
     bool isButtonPressing();
     bool isButtonValid();
 

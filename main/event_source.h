@@ -18,10 +18,17 @@ ESP_EVENT_DECLARE_BASE(APP_EVENTS);         // declaration of the task events fa
 enum {
     APP_EVENT_BTN_JUST_DOWN,    // Occured when the button just down
 
+    APP_EVENT_BTN_UP,
     APP_EVENT_BTN_SHORT,        // Occured when the button up
+    APP_EVENT_BTN_LONG,
+    APP_EVENT_BTN_DOUBLE,
+
     APP_EVENT_BTN_LONG_2SEC,    // Occured when the button up
     APP_EVENT_BTN_LONG_6SEC,    // Occured when the button up
     APP_EVENT_BTN_LONG_10SEC,   // Occured when the button up
+
+    APP_EVENT_BTN_PRESSING,
+    APP_EVENT_BTN_PRESSING_PER_SEC,
 
     APP_EVENT_BTN_PRESSING_2_4,
     APP_EVENT_BTN_PRESSING_6_8,

@@ -3,24 +3,29 @@
 
 const static char *TAG = "State";
 
-void State::pushShortKey(Context* c)
+void State::buttonPressedShort(Context* c)
 {
     ESP_LOGI(TAG, "short key ignored");
 }
 
-void State::pushLongKey2Sec(Context* c)
+void State::buttonPressedLong(Context *c)
 {
-    ESP_LOGI(TAG, "2 sec long key ignored");
+    ESP_LOGI(TAG, "long button ignored");
 }
 
-void State::pushLongKey4Sec(Context* c)
+void State::buttonPressedDouble(Context *c)
 {
-    ESP_LOGI(TAG, "4 sec long key ignored");
+    ESP_LOGI(TAG, "Double button ignored");
 }
 
-void State::pushLongKey10Sec(Context* c)
+void State::pressing(Context *c)
 {
-    ESP_LOGI(TAG, "10 sec long key ignored");
+    ESP_LOGI(TAG, "default pressing");
+}
+
+void State::buttonPressingPerSec(Context *c)
+{
+    ESP_LOGI(TAG, "default pressing per Sec");
 }
 
 void State::pressing2Sec(Context *c)

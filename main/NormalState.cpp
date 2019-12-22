@@ -91,67 +91,128 @@ extern "C" {
     }
 }
 
-void NormalState::pushShortKey(Context* c)
+void NormalState::buttonPressedShort(Context* c)
 {
     c->stackState(MeasureState::getInstance());
 }
 
-void NormalState::pushLongKey2Sec(Context* c)
+void NormalState::buttonPressedLong(Context *c)
+{
+    int duration = c->buttonPressingDuration();
+
+    ESP_LOGI(TAG, "duration: %d\n", duration);
+
+    if (duration >= 6 && duration < 10) {
+	c->changeState(OffState::getInstance());
+    } else if (duration >= 10 && duration < 14) {
+	c->changeState(WifiConfigState::getInstance());
+    }
+}
+
+void NormalState::buttonPressedDouble(Context *c)
 {
     app_event_emit(APP_EVENT_TEMP_MODE_TOGGLE, NULL);
 }
 
-void NormalState::pushLongKey4Sec(Context* c)
+void NormalState::pressing(Context *c)
 {
-    c->changeState(OffState::getInstance());
+    // static bool flag = true;
+    // static int count = 0;
+
+    // int duration = c->buttonPressingDuration();
+    // if (duration >= 2 && duration < 4) {
+
+    // 	    if (count == 0) {
+    // 		c->printStringToLED(flag ? (c->isColdMode() ? "HOT " : "COLD") : "    ");
+    // 	flag = !flag;
+    //   }
+
+    // } else if (duration >= 6 && duration < 10) {
+    // if (count == 0) {
+    //     c->printStringToLED(flag ? "BYE " : "    ");
+    //     flag = !flag;
+    // }
+    // } else if (duration >= 10 && duration < 12) {
+    // if (count == 0) {
+    //     c->printStringToLED(flag ? "WIFI" : "    ");
+    //     flag = !flag;
+    // }
+    // }
+
+    // ++count;
+    // count %= 3;
 }
 
-void NormalState::pushLongKey10Sec(Context* c)
-{
-    c->changeState(WifiConfigState::getInstance());
-}
-
-void NormalState::pressing2Sec(Context *c)
+void NormalState::buttonPressingPerSec(Context *c)
 {
     static bool flag = true;
     static int count = 0;
 
-    if (count == 0) {
-        c->printStringToLED(flag ? (c->isColdMode() ? "HOT " : "COLD") : "    ");
-        flag = !flag;
-    }
+    int duration = c->buttonPressingDuration();
+    if (duration >= 2 && duration < 4) {
 
-    ++count;
-    count %= 3;
-}
+	    if (count == 0) {
+		c->printStringToLED(flag ? (c->isColdMode() ? "HOT " : "COLD") : "    ");
+	flag = !flag;
+      }
 
-void NormalState::pressing6Sec(Context *c)
-{
-    static bool flag = true;
-    static int count = 0;
-
+    } else if (duration >= 6 && duration < 10) {
     if (count == 0) {
         c->printStringToLED(flag ? "BYE " : "    ");
         flag = !flag;
     }
-
-    ++count;
-    count %= 3;
-}
-
-void NormalState::pressing10Sec(Context *c)
-{
-    static bool flag = true;
-    static int count = 0;
-
+    } else if (duration >= 10 && duration < 12) {
     if (count == 0) {
         c->printStringToLED(flag ? "WIFI" : "    ");
         flag = !flag;
+    }
     }
 
     ++count;
     count %= 3;
 }
+
+// void NormalState::pressing2Sec(Context *c)
+// {
+//     static bool flag = true;
+//     static int count = 0;
+
+//     if (count == 0) {
+//         c->printStringToLED(flag ? (c->isColdMode() ? "HOT " : "COLD") : "    ");
+//         flag = !flag;
+//     }
+
+//     ++count;
+//     count %= 3;
+// }
+
+// void NormalState::pressing6Sec(Context *c)
+// {
+//     static bool flag = true;
+//     static int count = 0;
+
+//     if (count == 0) {
+//         c->printStringToLED(flag ? "BYE " : "    ");
+//         flag = !flag;
+//     }
+
+//     ++count;
+//     count %= 3;
+// }
+
+// void NormalState::pressing10Sec(Context *c)
+// {
+//     static bool flag = true;
+//     static int count = 0;
+
+//     if (count == 0) {
+//         c->printStringToLED(flag ? "WIFI" : "    ");
+//         flag = !flag;
+//     }
+
+//     ++count;
+//     count %= 3;
+// }
 
 void NormalState::begin(Context *c)
 {

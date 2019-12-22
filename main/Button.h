@@ -11,6 +11,8 @@ public:
     int read();
 
     bool is_pressing;
+    int duration_sec;
+    int duration;
     bool is_valid;
 
 private:

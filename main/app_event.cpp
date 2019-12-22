@@ -19,8 +19,17 @@ static const char* get_id_string(esp_event_base_t base, int32_t id)
         case APP_EVENT_BTN_JUST_DOWN:
             event = "APP_EVENT_BTN_JUST_DOWN";
             break;
+        case APP_EVENT_BTN_UP:
+            event = "APP_EVENT_BTN_UP";
+            break;
         case APP_EVENT_BTN_SHORT:
             event = "APP_EVENT_BTN_SHORT";
+            break;
+        case APP_EVENT_BTN_LONG:
+            event = "APP_EVENT_BTN_LONG";
+            break;
+        case APP_EVENT_BTN_DOUBLE:
+            event = "APP_EVENT_BTN_DOUBLE";
             break;
         case APP_EVENT_BTN_LONG_2SEC:
             event = "APP_EVENT_BTN_LONG_2SEC";
@@ -30,6 +39,12 @@ static const char* get_id_string(esp_event_base_t base, int32_t id)
             break;
         case APP_EVENT_BTN_LONG_10SEC:
             event = "APP_EVENT_BTN_LONG_10SEC";
+            break;
+        case APP_EVENT_BTN_PRESSING:
+            event = "APP_EVENT_BTN_PRESSING";
+            break;
+        case APP_EVENT_BTN_PRESSING_PER_SEC:
+            event = "APP_EVENT_BTN_PRESSING_PER_SEC";
             break;
         case APP_EVENT_BTN_PRESSING_2_4:
             event = "APP_EVENT_BTN_PRESSING_2_4";
@@ -75,21 +90,28 @@ static void app_loop_handler(void* handler_args, esp_event_base_t base, int32_t 
         // Context::getInstance()->buttonJustPressed();
         break;
     }
+    case APP_EVENT_BTN_UP: {
+        break;
+    }
     case APP_EVENT_BTN_SHORT: {
         // struct app_event_arg *d = (struct app_event_arg *) event_data;
-        Context::getInstance()->pushShortKey();
+        Context::getInstance()->buttonPressedShort();
         break;
     }
-    case APP_EVENT_BTN_LONG_2SEC: {
-        Context::getInstance()->pushLongKey2Sec();
+    case APP_EVENT_BTN_LONG: {
+        Context::getInstance()->buttonPressedLong();
         break;
     }
-    case APP_EVENT_BTN_LONG_6SEC: {
-        Context::getInstance()->pushLongKey4Sec();
+    case APP_EVENT_BTN_DOUBLE: {
+        Context::getInstance()->buttonPressedDouble();
         break;
     }
-    case APP_EVENT_BTN_LONG_10SEC: {
-        Context::getInstance()->pushLongKey10Sec();
+    case APP_EVENT_BTN_PRESSING: {
+	Context::getInstance()->buttonPressing((Button *) event_data);
+        break;
+    }
+    case APP_EVENT_BTN_PRESSING_PER_SEC: {
+        Context::getInstance()->buttonPressingPerSec();
         break;
     }
     case APP_EVENT_BTN_PRESSING_2_4: {

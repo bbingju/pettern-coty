@@ -45,7 +45,7 @@ extern "C" {
     }
 }
 
-void MeasureState::pushShortKey(Context *c)
+void MeasureState::buttonPressedShort(Context *c)
 {
     c->unstackState();
 }

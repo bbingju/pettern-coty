@@ -18,9 +18,15 @@ static void wifi_setting_task(void *arg)
 }
 }
 
-void WifiConfigState::pushLongKey10Sec(Context* c)
+void WifiConfigState::buttonPressedLong(Context *c)
 {
-  c->changeState(NormalState::getInstance());
+    int duration = c->buttonPressingDuration();
+
+    // ESP_LOGI(TAG, "duration: %d\n", duration);
+
+    if (duration >= 4 && duration < 8) {
+	c->changeState(NormalState::getInstance());
+    }
 }
 
 void WifiConfigState::pressing10Sec(Context *c)

@@ -57,6 +57,11 @@ bool Context::isNormalState()
     return _state_stack[_state_stack_idx] == NormalState::getInstance();
 }
 
+int Context::buttonPressingDuration()
+{
+    return _button.duration_sec;
+}
+
 bool Context::isButtonPressing()
 {
     return _button.is_pressing;
@@ -67,24 +72,29 @@ bool Context::isButtonValid()
     return _button.is_valid;
 }
 
-void Context::pushShortKey()
+void Context::buttonPressedShort()
 {
-    _state_stack[_state_stack_idx]->pushShortKey(this);
+    _state_stack[_state_stack_idx]->buttonPressedShort(this);
 }
 
-void Context::pushLongKey2Sec()
+void Context::buttonPressedLong()
 {
-    _state_stack[_state_stack_idx]->pushLongKey2Sec(this);
+    _state_stack[_state_stack_idx]->buttonPressedLong(this);
 }
 
-void Context::pushLongKey4Sec()
+void Context::buttonPressedDouble()
 {
-    _state_stack[_state_stack_idx]->pushLongKey4Sec(this);
+    _state_stack[_state_stack_idx]->buttonPressedDouble(this);
 }
 
-void Context::pushLongKey10Sec()
+void Context::buttonPressing(Button *btn)
 {
-    _state_stack[_state_stack_idx]->pushLongKey10Sec(this);
+    _state_stack[_state_stack_idx]->pressing(this);
+}
+
+void Context::buttonPressingPerSec()
+{
+    _state_stack[_state_stack_idx]->buttonPressingPerSec(this);
 }
 
 void Context::buttonPressing2Sec()

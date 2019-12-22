@@ -10,7 +10,7 @@ static void timer_callback(void* arg)
 }
 }
 
-void OffState::pushShortKey(Context *c) {
+void OffState::buttonPressedShort(Context *c) {
   // Power-on
   c->changeState(NormalState::getInstance());
 }

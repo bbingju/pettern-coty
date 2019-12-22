@@ -14,7 +14,7 @@ public:
         return &instance;
     }
 
-    void pushLongKey10Sec(Context* c);
+    void buttonPressedLong(Context *c);
     void pressing10Sec(Context *c);
 
 private:
