@@ -21,11 +21,11 @@ extern "C" {
         // 영점조정 완료
         c->printStringToLED("    ");
         vTaskDelay(pdMS_TO_TICKS(300));
-        c->printTemperatureToLED(0.f);
+        c->printWeightToLED(0.f);
         vTaskDelay(pdMS_TO_TICKS(300));
         c->printStringToLED("    ");
         vTaskDelay(pdMS_TO_TICKS(300));
-        c->printTemperatureToLED(0.f);
+        c->printWeightToLED(0.f);
 
         while (1) {
 
@@ -36,7 +36,7 @@ extern "C" {
 
             ESP_LOGI(TAG, "Loadcell - read average: %li, %.2f", v, w);
 
-            c->printTemperatureToLED(w);
+            c->printWeightToLED(w);
 
             scale.power_down(); // put the ADC in sleep mode
             vTaskDelay(pdMS_TO_TICKS(5000));

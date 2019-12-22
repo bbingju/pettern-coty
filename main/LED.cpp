@@ -252,6 +252,25 @@ void LED::printFloat(const float value)
     start();
 }
 
+void LED::printTemperature(const float value)
+{
+    if (value < 0.f || value > 1000.f)
+        return;
+
+    char value_str[5] = {0};
+    int v;
+
+    stop();
+    v = value;
+    _point_position = 1;
+    snprintf(value_str, 4, "%02u", v);
+    value_str[2] = '\'';
+    value_str[3] = 'C';
+    _isfloat = false;
+    set(value_str);
+    start();
+}
+
 void LED::start()
 {
     esp_timer_start_periodic(_timer, 300);

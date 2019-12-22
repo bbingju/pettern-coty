@@ -20,6 +20,7 @@ public:
     void changeButtonColor(COLOR);
     void printString(const char *str);
     void printFloat(const float value);
+    void printTemperature(const float value);
 
     int _clock_pin;
     int _data_pin;
