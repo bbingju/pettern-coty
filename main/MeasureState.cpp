@@ -39,7 +39,7 @@ extern "C" {
             c->printWeightToLED(w);
 
             scale.power_down(); // put the ADC in sleep mode
-            vTaskDelay(pdMS_TO_TICKS(5000));
+            vTaskDelay(pdMS_TO_TICKS(1000));
             scale.power_up();
         }
     }
