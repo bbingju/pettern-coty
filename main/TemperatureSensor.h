@@ -13,6 +13,8 @@ public:
     float read();
     float readAV();
 
+private:
+    const int readav_nbr = 20;
 };
 
 #endif /* TEMPERATURESENSOR_H */

@@ -21,10 +21,8 @@ float TemperatureSensor::read()
 float TemperatureSensor::readAV()
 {
     float val = 0.0f;
-    int i = 0;
-    for (i = 0; i < 20; i++) {
+    for (int i = 0; i < readav_nbr; i++) {
         val += read();
     }
-
-    return (val / i);
+    return (val / readav_nbr);
 }
