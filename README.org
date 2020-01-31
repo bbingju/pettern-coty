@@ -28,7 +28,11 @@
 ** Loadcell Amplifier - [[https://www.sparkfun.com/products/13879][HX711]]
    - [[https://github.com/bogde/HX711][Arduino driver]]
 
+
 * Firmware
+  기본적으로 ESP-IDF 기반에서 구현하며, 몇몇 부분은 Arduino를 사용하는
+  형태로 소스트리가 구성됨.
+
 ** Communication with Server & APP
    - 통신 명세는 [[https://gist.github.com/enoch2110/c0bfad44decc22b24a2690f9e1803869][Pettern IoT API]] 문서에서 확인할 수 있음.
    - MQTT, JSON, Rest API 등이 사용됨.
