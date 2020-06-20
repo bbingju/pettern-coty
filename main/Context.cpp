@@ -5,16 +5,6 @@
 Context::Context()
 {
     _state_stack[_state_stack_idx] = OffState::getInstance();
-
-    // get preferences
-    _pref.begin("cotypref");
-    float hot_mode_temp = _pref.getFloat("hot_mode_temp", 37.f);
-    float cold_mode_temp = _pref.getFloat("cold_mode_temp", 25.f);
-    printf("hot_mode_temp = %.1f\n", hot_mode_temp);
-    printf("cold_mode_temp = %.1f\n", cold_mode_temp);
-    _temp_mode.setTarget(TempMode::HOT, hot_mode_temp);
-    _temp_mode.setTarget(TempMode::COLD, cold_mode_temp);
-    _pref.end();
 }
 
 void Context::changeState(State *s)
