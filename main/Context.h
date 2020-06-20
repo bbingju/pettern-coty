@@ -12,8 +12,6 @@
 #include "State.h"
 #include "app_event.h"
 
-#include <Preferences.h>
-
 class State;
 
 class Context {
@@ -78,7 +76,6 @@ private:
     State *_state_stack[3]{0};
     int _state_stack_idx{0};
 
-    Preferences _pref;
     TemperatureSensor _temp_sensor;
     PumpSwitch _pump;
     FanSwitch _fan;
