@@ -37,7 +37,7 @@ public:
         return _mode == COLD ? _target_cold : _target_hot;
     }
 
-    void setTarget(enum TEMP_MODE mode, float target) {
+    void setTarget(TEMP_MODE mode, float target) {
         _pref.begin("tempmode", false);
         if (mode == COLD) {
             _pref.putFloat("cold_mode_temp", target);

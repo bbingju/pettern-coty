@@ -60,7 +60,7 @@ static void button_timer_callback(void* arg)
                 btn->is_valid = true;
                 app_event_emit(APP_EVENT_BTN_PRESSING_6_8, btn);
             }
-            else if (btn->duration_sec >= SEC(10) && btn->duration_sec < SEC(12)) {
+            else if (btn->duration_sec >= SEC(10) && btn->duration_sec < SEC(15)) {
                 btn->is_valid = true;
                 app_event_emit(APP_EVENT_BTN_PRESSING_10_12, btn);
             }

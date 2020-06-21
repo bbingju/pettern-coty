@@ -8,15 +8,18 @@
 #include "LED.h"
 #include "Button.h"
 #include "TempMode.h"
+#include "WifiInfo.h"
 
 #include "State.h"
 #include "app_event.h"
 
 class State;
 
-class Context {
+class Context
+{
 public:
-    static Context* getInstance() {
+    static Context *getInstance()
+    {
         static Context instance;
         return &instance;
     }
@@ -33,7 +36,7 @@ public:
     bool isButtonPressing();
     bool isButtonValid();
 
-    void changeState(State* s);
+    void changeState(State *s);
     void stackState(State *s);
     void unstackState();
 
@@ -47,10 +50,11 @@ public:
     void printWeightToLED(const float value);
     void printTemperatureToLED(const float);
 
-    TempMode& getTempMode();
+    TempMode &getTempMode();
     void toggleTempMode();
     bool isColdMode();
     float getTargetTemperature();
+    bool setTargetTemperature(TempMode::TEMP_MODE mode, float target);
 
     void pumpOn();
     void pumpOff();
@@ -66,6 +70,9 @@ public:
     bool isTecStopped();
     const char *tecState();
 
+    void saveWiFiInfo(String ssid, String password);
+    void setupWiFi();
+
 private:
     Context();
     // Context(Context const&);
@@ -73,7 +80,7 @@ private:
 
     const int state_stack_max{3};
     friend class State;
-    State *_state_stack[3]{0};
+    State *_state_stack[3] {0};
     int _state_stack_idx{0};
 
     TemperatureSensor _temp_sensor;
@@ -83,6 +90,7 @@ private:
     LED _led;
     Button _button;
     TempMode _temp_mode;
+    WifiInfo _wifi_info;
 };
 
 #endif /* CONTEXT_H */

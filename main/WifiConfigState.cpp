@@ -5,6 +5,7 @@
 
 #include <ArduinoJson.h>
 #include <Preferences.h>
+
 Preferences prefs;
 
 static const char *TAG = "wifi_state";
@@ -72,8 +73,8 @@ extern "C" {
 
     static void wifi_server_task(void *arg)
     {
-        Context *c = (Context *) arg;
-        WifiConfigState *s = (WifiConfigState *) c->getState();
+        Context *ctx = (Context *) arg;
+        WifiConfigState *s = (WifiConfigState *) ctx->getState();
         String header = "";
 
         WiFi.softAP(s->ap_ssid.c_str());
@@ -139,6 +140,9 @@ extern "C" {
                                 ssid = ssid.substring(ssid.indexOf("=") + 1);
                                 password = password.substring(password.indexOf("=") + 1);
                                 printf("ssid = %s, password = %s\r\n", ssid.c_str(), password.c_str());
+
+				ctx->saveWiFiInfo(ssid, password);
+				ctx->setupWiFi();
 
                                 client.println(F("HTTP/1.1 200 OK"));
                                 client.println(F("Content-type: application/json"));

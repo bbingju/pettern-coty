@@ -37,7 +37,7 @@ void Context::unstackState()
     }
 }
 
-State * Context::getState()
+State *Context::getState()
 {
     return _state_stack[_state_stack_idx];
 }
@@ -127,7 +127,7 @@ void Context::printTemperatureToLED(const float value)
     _led.printTemperature(value);
 }
 
-TempMode& Context::getTempMode()
+TempMode &Context::getTempMode()
 {
     return _temp_mode;
 }
@@ -147,6 +147,11 @@ float Context::getTargetTemperature()
     return _temp_mode.getTarget();
 }
 
+bool Context::setTargetTemperature(TempMode::TEMP_MODE mode, float target)
+{
+    _temp_mode.setTarget(mode, target);
+    return true;
+}
 void Context::pumpOn()
 {
     _pump.on();
@@ -197,7 +202,17 @@ bool Context::isTecStopped()
     return _tec.isStopped();
 }
 
-const char * Context::tecState()
+const char *Context::tecState()
 {
     return _tec.stateToString();
+}
+
+void Context::saveWiFiInfo(String ssid, String password)
+{
+    _wifi_info.save(ssid, password);
+}
+
+void Context::setupWiFi()
+{
+    _wifi_info.setup();
 }

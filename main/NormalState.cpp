@@ -11,87 +11,87 @@ static const char *TAG = "NORMAL_STATE";
 double Setpoint, Input, Output;
 
 //Specify the links and initial tuning parameters
-double Kp=2, Ki=5, Kd=1;
+double Kp = 2, Ki = 5, Kd = 1;
 PID myPID(&Input, &Output, &Setpoint, Kp, Ki, Kd, DIRECT);
 
 extern "C" {
     static void pid_task(void *arg)
     {
-      Context *c = (Context *)arg;
-
-      Input = c->readCurrentTemperature();
-      Setpoint = c->getTargetTemperature();
-
-      myPID.SetMode(AUTOMATIC);
-
-      while (1) {
+        Context *c = (Context *)arg;
 
         Input = c->readCurrentTemperature();
         Setpoint = c->getTargetTemperature();
 
-        myPID.Compute();
+        myPID.SetMode(AUTOMATIC);
 
-        double current = c->readCurrentTemperature();
-        double target = c->getTargetTemperature();
-        float target_l = target - 0.5f;
-        float target_h = target + 0.5f;
+        while (1) {
 
-        if (c->isColdMode()) {
-          if (current > target_h) {
-            if (!c->isTecCooling()) {
-              c->tecCoolDown();
-              c->pumpOn();
-              c->fanOn();
+            Input = c->readCurrentTemperature();
+            Setpoint = c->getTargetTemperature();
+
+            myPID.Compute();
+
+            double current = c->readCurrentTemperature();
+            double target = c->getTargetTemperature();
+            float target_l = target - 0.5f;
+            float target_h = target + 0.5f;
+
+            if (c->isColdMode()) {
+                if (current > target_h) {
+                    if (!c->isTecCooling()) {
+                        c->tecCoolDown();
+                        c->pumpOn();
+                        c->fanOn();
+                    }
+                } else if (current < target_l) {
+                    if (!c->isTecHeating()) {
+                        c->tecHeatUp();
+                        c->pumpOn();
+                        c->fanOn();
+                    }
+                } else {
+                    if (!c->isTecStopped()) {
+                        c->tecStop();
+                        c->pumpOff();
+                        c->fanOff();
+                    }
+                }
+                ESP_LOGI(TAG, "COLD MODE - Current: %.2f, Target: %.2f => %s",
+                         current, target, c->tecState());
+            } else {
+                if (current < target_l) {
+                    if (!c->isTecHeating()) {
+                        c->tecHeatUp();
+                        c->pumpOn();
+                        c->fanOn();
+                    }
+                } else if (current > target_h) {
+                    if (!c->isTecCooling()) {
+                        c->tecCoolDown();
+                        c->pumpOn();
+                        c->fanOn();
+                    }
+                } else {
+                    if (!c->isTecStopped()) {
+                        c->tecStop();
+                        c->pumpOff();
+                        c->fanOff();
+                    }
+                }
+                ESP_LOGI(TAG, "HOT MODE - Current: %.2f, Target: %.2f => %s", current,
+                         target, c->tecState());
             }
-          } else if (current < target_l) {
-            if (!c->isTecHeating()) {
-              c->tecHeatUp();
-              c->pumpOn();
-              c->fanOn();
+
+            if (c->isNormalState() && !c->isButtonValid()) {
+                c->printTemperatureToLED(target);
             }
-          } else {
-            if (!c->isTecStopped()) {
-              c->tecStop();
-              c->pumpOff();
-              c->fanOff();
-            }
-          }
-          ESP_LOGI(TAG, "COLD MODE - Current: %.2f, Target: %.2f => %s",
-                   current, target, c->tecState());
-        } else {
-          if (current < target_l) {
-            if (!c->isTecHeating()) {
-              c->tecHeatUp();
-              c->pumpOn();
-              c->fanOn();
-            }
-          } else if (current > target_h) {
-            if (!c->isTecCooling()) {
-              c->tecCoolDown();
-              c->pumpOn();
-              c->fanOn();
-            }
-          } else {
-            if (!c->isTecStopped()) {
-              c->tecStop();
-              c->pumpOff();
-              c->fanOff();
-            }
-          }
-          ESP_LOGI(TAG, "HOT MODE - Current: %.2f, Target: %.2f => %s", current,
-                   target, c->tecState());
+
+            vTaskDelay(pdMS_TO_TICKS(1000));
         }
-
-        if (c->isNormalState() && !c->isButtonValid()) {
-            c->printTemperatureToLED(target);
-        }
-
-        vTaskDelay(pdMS_TO_TICKS(1000));
-      }
     }
 }
 
-void NormalState::buttonPressedShort(Context* c)
+void NormalState::buttonPressedShort(Context *c)
 {
     c->stackState(MeasureState::getInstance());
 }
@@ -103,9 +103,9 @@ void NormalState::buttonPressedLong(Context *c)
     ESP_LOGI(TAG, "duration: %d\n", duration);
 
     if (duration >= 6 && duration < 10) {
-	c->changeState(OffState::getInstance());
-    } else if (duration >= 10 && duration < 14) {
-	c->changeState(WifiConfigState::getInstance());
+        c->changeState(OffState::getInstance());
+    } else if (duration >= 10 /* && duration < 14 */) {
+        c->changeState(WifiConfigState::getInstance());
     }
 }
 
@@ -122,9 +122,9 @@ void NormalState::pressing(Context *c)
     // int duration = c->buttonPressingDuration();
     // if (duration >= 2 && duration < 4) {
 
-    // 	    if (count == 0) {
-    // 		c->printStringToLED(flag ? (c->isColdMode() ? "HOT " : "COLD") : "    ");
-    // 	flag = !flag;
+    //      if (count == 0) {
+    //      c->printStringToLED(flag ? (c->isColdMode() ? "HOT " : "COLD") : "    ");
+    //  flag = !flag;
     //   }
 
     // } else if (duration >= 6 && duration < 10) {
@@ -151,21 +151,21 @@ void NormalState::buttonPressingPerSec(Context *c)
     int duration = c->buttonPressingDuration();
     if (duration >= 2 && duration < 4) {
 
-	    if (count == 0) {
-		c->printStringToLED(flag ? (c->isColdMode() ? "HOT " : "COLD") : "    ");
-	flag = !flag;
-      }
+        if (count == 0) {
+            c->printStringToLED(flag ? (c->isColdMode() ? "HOT " : "COLD") : "    ");
+            flag = !flag;
+        }
 
     } else if (duration >= 6 && duration < 10) {
-    if (count == 0) {
-        c->printStringToLED(flag ? "BYE " : "    ");
-        flag = !flag;
-    }
+        if (count == 0) {
+            c->printStringToLED(flag ? "BYE " : "    ");
+            flag = !flag;
+        }
     } else if (duration >= 10 && duration < 12) {
-    if (count == 0) {
-        c->printStringToLED(flag ? "WIFI" : "    ");
-        flag = !flag;
-    }
+        if (count == 0) {
+            c->printStringToLED(flag ? "WIFI" : "    ");
+            flag = !flag;
+        }
     }
 
     ++count;
@@ -219,7 +219,7 @@ void NormalState::begin(Context *c)
     c->changeButtonColor(c->isColdMode() ? LED::BLUE : LED::RED);
 
     xTaskCreatePinnedToCore(pid_task, "pid_task",
-			    4096, c, 3, &_task_handle, 1);
+                            4096, c, 3, &_task_handle, 1);
 }
 
 void NormalState::end(Context *c)
