@@ -82,7 +82,7 @@ static void handle_temp_mode_toggle()
 
 static void app_loop_handler(void* handler_args, esp_event_base_t base, int32_t id, void* event_data)
 {
-    ESP_LOGI(TAG, "%s", get_id_string(base, id));
+  //    ESP_LOGI(TAG, "%s", get_id_string(base, id));
 
     switch (id) {
 

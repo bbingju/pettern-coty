@@ -36,6 +36,7 @@ extern "C" {
 
             ESP_LOGI(TAG, "Loadcell - read average: %li, %.2f", v, w);
 
+	    c->setLastWeight(w);
             c->printWeightToLED(w);
 
             scale.power_down(); // put the ADC in sleep mode

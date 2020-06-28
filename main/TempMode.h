@@ -33,8 +33,12 @@ public:
         return (_mode == COLD);
     }
 
+  float getTarget(TEMP_MODE mode) {
+        return mode == COLD ? _target_cold : _target_hot;
+  }
+
     float getTarget() {
-        return _mode == COLD ? _target_cold : _target_hot;
+      return getTarget(_mode);
     }
 
     void setTarget(TEMP_MODE mode, float target) {

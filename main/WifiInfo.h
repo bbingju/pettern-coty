@@ -38,9 +38,28 @@ public:
         save(ssid, "");
     }
 
-    void setup()
+    String getSSID()
     {
-        printf("%d\r\n", WiFi.status());
+      return _ssid;
+    }
+
+    String getPassword()
+    {
+      return _password;
+    }
+
+    bool isNewSave()
+    {
+      return _set_new_wifi;
+    }
+
+    void reset()
+    {
+        _set_new_wifi = false;
+
+        _pref.begin("wifiinfo", false);
+        _pref.putBool("set_new_wifi", _set_new_wifi);
+        _pref.end();
     }
 
 private:

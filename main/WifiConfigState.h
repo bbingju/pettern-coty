@@ -27,7 +27,8 @@ public:
 
     // WiFiClient client;
     // String header;
-    const String ap_ssid = "PETTERN_KOTI";
+    // const String ap_ssid = "PETTERN_KOTI";
+    String ap_ssid;
 
     int scan_nbr;
     SemaphoreHandle_t _mutex = NULL;
@@ -35,9 +36,14 @@ public:
     TaskHandle_t _setting_task_handle;
     TaskHandle_t _server_task_handle;
     TaskHandle_t _scan_task_handle;
+    bool _is_set_wifi = false;
 
 private:
-    WifiConfigState() {}
+    WifiConfigState()
+    {
+        Context *ctx = Context::getInstance();
+        ap_ssid = ctx->getDeviceName();
+    }
 
     void begin(Context *);
     void end(Context *);

@@ -2,8 +2,21 @@
 #include "NormalState.h"
 #include "OffState.h"
 
+#include <stdio.h>
+#include "esp_system.h"
+#include "endian.h"
+
 Context::Context()
 {
+    uint8_t mac_addr[6] = { 0 };
+    uint16_t last_2_bytes = 0;
+    char wifi_ap_name[32] = { 0 };
+
+    esp_read_mac(mac_addr, ESP_MAC_WIFI_SOFTAP);
+    last_2_bytes = *((uint16_t *)&mac_addr[4]);
+    sprintf(wifi_ap_name, "PETTERN_%04X", be16dec(&last_2_bytes));
+    _device_name = wifi_ap_name;
+
     _state_stack[_state_stack_idx] = OffState::getInstance();
 }
 
@@ -122,6 +135,11 @@ void Context::printWeightToLED(const float value)
     _led.printFloat(value);
 }
 
+String Context::getDeviceName()
+{
+    return _device_name;
+}
+
 void Context::printTemperatureToLED(const float value)
 {
     _led.printTemperature(value);
@@ -212,7 +230,30 @@ void Context::saveWiFiInfo(String ssid, String password)
     _wifi_info.save(ssid, password);
 }
 
+String Context::getWiFiSSID()
+{
+    return _wifi_info.getSSID();
+}
+
+String Context::getWiFiPassword()
+{
+    return _wifi_info.getPassword();
+}
+
 void Context::setupWiFi()
 {
-    _wifi_info.setup();
+
+}
+
+float Context::getLastWeight()
+{
+    return _last_weight;
+}
+
+void Context::setLastWeight(float weight)
+{
+    if (_last_weight != weight) {
+        _last_weight = weight;
+
+    }
 }

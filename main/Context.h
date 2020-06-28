@@ -43,6 +43,8 @@ public:
     State *getState();
     bool isNormalState();
 
+    String getDeviceName();
+
     float readCurrentTemperature();
 
     void changeButtonColor(LED::COLOR);
@@ -70,14 +72,21 @@ public:
     bool isTecStopped();
     const char *tecState();
 
-    void saveWiFiInfo(String ssid, String password);
     void setupWiFi();
+    void saveWiFiInfo(String ssid, String password);
+    String getWiFiSSID();
+    String getWiFiPassword();
+
+    float getLastWeight();
+    void setLastWeight(float weight);
+
 
 private:
     Context();
     // Context(Context const&);
     // void operator=(Context const&);
 
+    String _device_name;
     const int state_stack_max{3};
     friend class State;
     State *_state_stack[3] {0};
@@ -91,6 +100,7 @@ private:
     Button _button;
     TempMode _temp_mode;
     WifiInfo _wifi_info;
+    float _last_weight;
 };
 
 #endif /* CONTEXT_H */

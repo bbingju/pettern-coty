@@ -4,9 +4,7 @@
 #include "esp_log.h"
 
 #include <ArduinoJson.h>
-#include <Preferences.h>
-
-Preferences prefs;
+// #include <Preferences.h>
 
 static const char *TAG = "wifi_state";
 
@@ -18,6 +16,7 @@ extern "C" {
     static void wifi_setting_task(void *arg)
     {
         Context *c = (Context *) arg;
+        WifiConfigState *s = (WifiConfigState *) c->getState();
 
         while (1) {
             c->printStringToLED("WIFI");
@@ -26,6 +25,12 @@ extern "C" {
             vTaskDelay(pdMS_TO_TICKS(400));
             c->changeButtonColor(LED::BLUE);
             vTaskDelay(pdMS_TO_TICKS(400));
+
+            if (s->_is_set_wifi) {
+                s->_is_set_wifi = false;
+                printf("return to Normal state\r\n");
+                c->changeState(NormalState::getInstance());
+            }
         }
     }
 
@@ -130,7 +135,7 @@ extern "C" {
 
                             } else if (header.indexOf("POST /api/routers/") >= 0) {
                                 DynamicJsonDocument resp(1024);
-                                resp["device_id"] = "1";
+                                resp["device_id"] = ctx->getDeviceName();
 
                                 vTaskSuspend(s->_scan_task_handle);
 
@@ -141,8 +146,8 @@ extern "C" {
                                 password = password.substring(password.indexOf("=") + 1);
                                 printf("ssid = %s, password = %s\r\n", ssid.c_str(), password.c_str());
 
-				ctx->saveWiFiInfo(ssid, password);
-				ctx->setupWiFi();
+                                ctx->saveWiFiInfo(ssid, password);
+                                ctx->setupWiFi();
 
                                 client.println(F("HTTP/1.1 200 OK"));
                                 client.println(F("Content-type: application/json"));
@@ -156,6 +161,13 @@ extern "C" {
                                 serializeJson(resp, resp_json);
                                 printf("%s", resp_json.c_str());
                                 vTaskResume(s->_scan_task_handle);
+
+                                vTaskDelay(pdMS_TO_TICKS(500));
+                                // s->_is_set_wifi = true;
+                                header = "";
+                                client.stop();
+                                printf("[Client disconnected]\r\n");
+                                esp_restart();
                                 break;
                             } else {
                                 client.println(F("HTTP/1.1 400 Bad Request"));
@@ -172,11 +184,11 @@ extern "C" {
                     }
                 }
             } // end of client connected
-            vTaskDelay(pdMS_TO_TICKS(100));
+            vTaskDelay(pdMS_TO_TICKS(300));
             // delay(1);
             header = "";
             client.stop();
-            Serial.println("[Client disconnected]");
+            printf("[Client disconnected]\r\n");
         } // end of while loop
     } // the end of function
 }
@@ -223,6 +235,7 @@ void WifiConfigState::begin(Context *c)
 
 void WifiConfigState::end(Context *c)
 {
+    printf("WifiConfigState::end\r\n");
     c->printStringToLED("    ");
     c->changeButtonColor(LED::BLACK);
 
@@ -232,14 +245,4 @@ void WifiConfigState::end(Context *c)
     vTaskDelete(_setting_task_handle);
 
     vSemaphoreDelete(_mutex);
-}
-
-void WifiConfigState::setInfo(const char *ssid, const char *password)
-{
-    prefs.begin("wifi_info");
-    prefs.putString("ssid", ssid);
-    prefs.putString("password", password);
-    prefs.end();
-
-    ESP_LOGI(TAG, "%s: ssid:%s, password:%s", __func__, ssid, password);
 }
